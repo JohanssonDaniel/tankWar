@@ -211,6 +211,9 @@ void Board::clearSquare(const location &loc) {
  */
 void Board::displayBoard(const string &name_p1, const string &name_p2, const action &p1mov, const action &p2mov) {
 
+    cout << " enemy justHit" << just_hit_p1 << endl;
+    cout <<"garlick c:" << p1tank.c << " r:" << p1tank.r << endl;
+
     location hold;
 
     cout << name_p1 << "(1,A): ";

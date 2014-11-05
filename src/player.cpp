@@ -10,8 +10,12 @@ player::player() {
 
 action player::doYourThing (const sensors &s) {
     analyzeEnemyPosition(enemyMoves, s);
-    if(s.turn > 1){
+    if(s.turn > 1 && !(s.myAmmo == 0)){
         return predictiveFire(enemyMoves, s);
+
+    }
+    else if (enemyDistance(s) < 50){
+        return evasion(s);
     }
     return fireAtOpp(s);  // right now calls base class fireAtOpp method -
                             // feel free to override that method

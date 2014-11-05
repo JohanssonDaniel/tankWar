@@ -70,15 +70,25 @@ action Tank::predictiveFire(map<int, location>& enemyPositions, const sensors &s
     int differenceRow = 0;
     location lastEnemyPosition = enemyPositions.at(s.turn-1);
 
-    if((abs(lastEnemyPosition.c - s.opp.c == 1) && (abs(lastEnemyPosition.r - s.opp.c) == 1))){
-        differenceColumn = lastEnemyPosition.c - s.opp.c;
-        differenceRow = lastEnemyPosition.r - s.opp.r;
+    cout << "lastenemy: " << lastEnemyPosition.c << " : " << lastEnemyPosition.r << endl;
+    cout << "currentEnemy: " << s.opp.c << " : " << s.opp.r << endl;
+
+
+    if(lastEnemyPosition != s.opp){
+        differenceColumn =  s.opp.c- lastEnemyPosition.c;
+        differenceRow = s.opp.r -lastEnemyPosition.r;
+
+        //difference = s.opp - lastEnemyPosition;
+        //guessNextEnemyPosition = s.opp + difference;
         guessNextEnemyPosition.c = s.opp.c + differenceColumn;
         guessNextEnemyPosition.r = s.opp.r + differenceRow;
+        cout << "Testing: " << endl;
     }
     else{
         guessNextEnemyPosition = s.opp;
+        cout << "Hej" << endl;
     }
+    cout << "yolo c:" << guessNextEnemyPosition.c << " r:" << guessNextEnemyPosition.r << endl;
     move.aim = guessNextEnemyPosition;
     move.theMove = fire;
     return move;
@@ -86,4 +96,8 @@ action Tank::predictiveFire(map<int, location>& enemyPositions, const sensors &s
 
 void Tank::analyzeEnemyPosition(map<int, location>& positionList, const sensors &s){
     positionList.insert(make_pair(s.turn,s.opp));
+}
+
+int enemyDistance(const sensors &s){
+
 }

@@ -91,7 +91,8 @@ int main() {
                 move_hold2 = p2.doYourThing(activateSensors(2, game, turnNum));
                 processMove(move_hold2, 2, game);
                 updateScore(2, game);
-			}
+            }
+
             game.displayBoard(p1.getName(), p2.getName(), move_hold1, move_hold2);
 			proceed();			// either asks user to press enter, or waits for timer
             if ( (turnNum < MAX_TURNS) && ((gameStatus = findWinner(p1, p2, game)) == 0) ) { // if no winner, proceed with next player
