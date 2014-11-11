@@ -19,12 +19,6 @@ public:
     string getName() const;                         // gets your name
     virtual action goToOppBase(const sensors&);		// returns the next move required to get to the opponents base
     virtual action fireAtOpp(const sensors&); 		// aims and fires at the enemy's current position - they may move!
-    virtual action predictiveFire(map<int, location>&, const sensors&);
-
-    /**Our own stuff **/
-    virtual void analyzeEnemyPosition(map<int, location>&, const sensors&);
-    virtual int enemyDistance(const sensors&);
-    virtual action evasion(const sensors&);
 
     virtual action doYourThing(const sensors&) = 0;	// PURE VIRTUAL METHOD - MUST OVERRIDE IN YOUR CLASS
     virtual string taunt(const string&) const = 0;  // PURE VIRTUAL METHOD - MUST OVERRIDE IN YOUR CLASS

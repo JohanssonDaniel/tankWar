@@ -22,8 +22,16 @@ public:
     action doYourThing(const sensors&) override;
     string taunt(const string&) const override;
 
+
+
+    /**Our own stuff **/
+    action predictiveFire(const sensors&);
+    void analyzeEnemyPosition(const sensors&);
+    double enemyDistance(int col, int row, const sensors&);
+    action evasion(const sensors&);
+
 private:
     // any data that I want to retain for my tank - probably want to store some tank state information
-    map<int, location> enemyMoves;
+    map<int, location> positionList;
 
 };
