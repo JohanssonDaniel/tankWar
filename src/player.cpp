@@ -12,14 +12,14 @@ player::player() {
 
 action player::doYourThing (const sensors &s) {
     analyzeEnemyPosition(s);
-    if(s.turn > 1 && !(s.myAmmo < 0)){
+    if(s.turn >1 && !(s.myAmmo < 0)){
         return predictiveFire(s);
 
     }
     else {
         return evasion(s);
     }
-    return fireAtOpp(s);  // right now calls base class fireAtOpp method -
+    //return fireAtOpp(s);  // right now calls base class fireAtOpp method -
                             // feel free to override that method
                             // with one that fires at where you think they will be
 }
@@ -40,7 +40,7 @@ action player::predictiveFire(const sensors &s){
 
 
     if(lastEnemyPosition != s.opp){
-        differenceColumn =  s.opp.c- lastEnemyPosition.c;
+        differenceColumn =  s.opp.c - lastEnemyPosition.c;
         differenceRow = s.opp.r -lastEnemyPosition.r;
 
         //difference = s.opp - lastEnemyPosition;
@@ -70,7 +70,7 @@ double player::enemyDistance(int tempCol, int tempRow, const sensors &s){
 }
 
 
-bool inBounds(int col, int row) {
+bool player::inBounds(int col, int row) {
    return row > 0 && col > 0 && row < BOARD_ROWS && col < BOARD_COLS;
 }
 
@@ -81,9 +81,9 @@ action player::evasion(const sensors &s){
     int y = s.me.r;
     double closestDistance = 0.0;
     int closestIndex;
-    vector<int> xValues {x - 1,   x + 1,    x,      x - 1,  x + 1,  x,      x - 1,  x + 1};
-    vector<int> yValues {y - 1,   y - 1,    y - 1,  y + 1,  y + 1,  y + 1,  y,      y};
-    vector<moves> directions {moveNW, moveNE, moveN, moveSW, moveSE, moveS, moveW, moveE};
+    vector<int> xValues     {x - 1,   x + 1,    x,      x - 1,  x + 1,  x,      x - 1,  x + 1};
+    vector<int> yValues     {y - 1,   y - 1,    y - 1,  y + 1,  y + 1,  y + 1,  y,      y};
+    vector<moves> directions{moveNW, moveNE,   moveN,  moveSW, moveSE, moveS,  moveW,  moveE};
     for (int i = 0; i < 8; i++) {
         if (inBounds(xValues[i], yValues[i])) {
             cout << "Index: " << i << " : position: " << xValues[i] << " y : " << yValues[i] << endl;

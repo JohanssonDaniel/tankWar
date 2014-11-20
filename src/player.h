@@ -29,6 +29,7 @@ public:
     void analyzeEnemyPosition(const sensors&);
     double enemyDistance(int col, int row, const sensors&);
     action evasion(const sensors&);
+    bool inBounds(int x, int y);
 
 private:
     // any data that I want to retain for my tank - probably want to store some tank state information
