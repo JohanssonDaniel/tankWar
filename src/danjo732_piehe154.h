@@ -27,6 +27,10 @@ public:
      */
     action evasion(const sensors&);
 
+    action moveToOppBase(const sensors&);
+
+
+
     /**
      * @brief uppdaterar spelarens positionList genom att lägga till motsåndarens nuvarande position
      */
@@ -34,13 +38,15 @@ public:
 
     /**
      * @brief enemyDistance     räknar ut motsåndarens avstånd med hjälp av pythagoras sats
-     * @param col               numeriskt värde för motsåndarens nuvarande kolumn
-     * @param row               numeriskt värde för motsåndarens nuvarande rad
+     * @param col               numeriskt värde för vår spelares nuvarande kolumn
+     * @param row               numeriskt värde för vår spelares nuvarande rad
+     * @param targetRow         numeriskt värde för ditt vi vill åka
+     * @param targetCol1        numeriskt värde för ditt vi vill åka
      * @return                  numeriskt värde för motsåndarens avstånd
      *
      * Användning: double tempDistace = enemyDistance(int col, int row);
      */
-    double enemyDistance(int col, int row, const sensors&) const;
+    double enemyDistance(int col, int row, int targetCol, int targetRow) const;
 
     /**
      * @brief inBounds          Jämför spelarens position med BOARD_ROWS samt BOARD_COLS för att avgöra om spelaren är på väg att åka

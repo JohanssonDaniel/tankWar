@@ -13,12 +13,19 @@ danjo732_piehe154::danjo732_piehe154() {
 
 action danjo732_piehe154::doYourThing (const sensors &s) {
     analyzeEnemyPosition(s);
-    if(s.turn > 0 && !(s.myAmmo < 0)){
+    if(s.turn > 1 && !(s.myAmmo < 0)){
         return predictiveFire(s);
 
     }
     else {
-        return evasion(s);
+        if (s.me != s.oppBase) {
+            return moveToOppBase(s);
+        }
+        else {
+            action move;
+            move.theMove = sit;
+            return move;
+        }
     }
 
 }
@@ -26,6 +33,7 @@ action danjo732_piehe154::doYourThing (const sensors &s) {
 string danjo732_piehe154::taunt(const string &otherguy) const{
     return "Hej svejs i lingonskogen " + otherguy;
 }
+
 /*
  * Förutsäger motsåndarens position genom att se hur den har rörtt sig från förra omgången
  * Förutsätter att motståndaren rör sig i samma riktning från förra omgången
@@ -60,10 +68,10 @@ void danjo732_piehe154::analyzeEnemyPosition(const sensors &s){
 /*
  * Räknar ut avståndet till fienden med pytagoras stats
  */
-double danjo732_piehe154::enemyDistance(int tempCol, int tempRow, const sensors &s) const{
+double danjo732_piehe154::enemyDistance(int tempCol, int tempRow, int targetCol, int targetRow) const{
 
-    double distanceRow = abs(tempRow - s.opp.r);
-    double distanceCol = abs(tempCol - s.opp.c);
+    double distanceRow = abs(tempRow - targetRow);
+    double distanceCol = abs(tempCol - targetCol);
 
     return sqrt(pow(distanceRow,2.0) + pow(distanceCol, 2.0));
 }
@@ -71,6 +79,38 @@ double danjo732_piehe154::enemyDistance(int tempCol, int tempRow, const sensors 
 
 bool danjo732_piehe154::inBounds(int col, int row) const{
    return row > 0 && col > 0 && row < BOARD_ROWS && col < BOARD_COLS;
+}
+
+/*
+ * Jämför alla positioner runt om spelaren och ser vilken riktning som ökar avståndet mest
+ */
+action danjo732_piehe154::moveToOppBase(const sensors &s){
+    action move;
+    int x = s.me.c;
+    int y = s.me.r;
+    double shortestDistance = 0.0;
+    int closestIndex;
+
+    //Håller värderna för rader och kolumner runt om spelaren, representerar samma riktning som ligger i vektorn under
+
+    vector<int> xValues     {x - 1,   x + 1,    x,      x - 1,  x + 1,  x,      x - 1,  x + 1};
+    vector<int> yValues     {y - 1,   y - 1,    y - 1,  y + 1,  y + 1,  y + 1,  y,      y};
+
+    vector<moves> directions{moveNW,  moveNE,   moveN,  moveSW, moveSE, moveS,  moveW,  moveE};
+
+    for (int i = 0; i < 8; i++) {
+        if (inBounds(xValues[i], yValues[i])) {
+            double tempEnemyDistance = enemyDistance(xValues[i], yValues[i], s.oppBase.c, s.oppBase.r);
+            if (tempEnemyDistance < shortestDistance || shortestDistance == 0.0) {
+                //Sparar undan det kortaste avståndet och dess index
+                shortestDistance = tempEnemyDistance;
+                closestIndex = i;
+            }
+        }
+    }
+    //Väljer ut rätt riktning med det sparade indexet
+    move.theMove = directions[closestIndex];
+    return move;
 }
 
 /*
@@ -92,7 +132,7 @@ action danjo732_piehe154::evasion(const sensors &s){
 
     for (int i = 0; i < 8; i++) {
         if (inBounds(xValues[i], yValues[i])) {
-            double tempEnemyDistance = enemyDistance(xValues[i], yValues[i], s);
+            double tempEnemyDistance = enemyDistance(xValues[i], yValues[i], s.opp.c, s.opp.r);
             if (tempEnemyDistance > longestDistance || longestDistance == 0.0) {
                 //Sparar undan det längsta avståndet och dess index
                 longestDistance = tempEnemyDistance;
