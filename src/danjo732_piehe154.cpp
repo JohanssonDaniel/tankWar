@@ -6,6 +6,9 @@
 #include "danjo732_piehe154.h"
 #include <vector>
 #include <math.h>
+#include <stdio.h>      /* printf, scanf, puts, NULL */
+#include <stdlib.h>     /* srand, rand */
+#include <time.h>       /* time */
 
 danjo732_piehe154::danjo732_piehe154() {
     name = "danjo732_piehe154";
@@ -13,9 +16,9 @@ danjo732_piehe154::danjo732_piehe154() {
 
 action danjo732_piehe154::doYourThing (const sensors &s) {
     analyzeEnemyPosition(s);
-    if(s.turn > 1 && !(s.myAmmo < 0)){
-        return predictiveFire(s);
 
+    if(s.turn > 2 && !(s.myAmmo < 0)){
+        return predictiveFire(s);
     }
     else {
         if (s.me != s.oppBase) {
@@ -82,7 +85,8 @@ bool danjo732_piehe154::inBounds(int col, int row) const{
 }
 
 /*
- * Jämför alla positioner runt om spelaren och ser vilken riktning som ökar avståndet mest
+ * Jämför alla positioner runt om spelaren och ser vilken
+ * riktning som är närmast/näst närmast (strafe) mot motståndarens bas
  */
 action danjo732_piehe154::moveToOppBase(const sensors &s){
     action move;
@@ -90,6 +94,8 @@ action danjo732_piehe154::moveToOppBase(const sensors &s){
     int y = s.me.r;
     double shortestDistance = 0.0;
     int closestIndex;
+    double nextShortestDistance = 0.0;
+    int nextClosestIndex;
 
     //Håller värderna för rader och kolumner runt om spelaren, representerar samma riktning som ligger i vektorn under
 
@@ -103,14 +109,27 @@ action danjo732_piehe154::moveToOppBase(const sensors &s){
             double tempEnemyDistance = enemyDistance(xValues[i], yValues[i], s.oppBase.c, s.oppBase.r);
             if (tempEnemyDistance < shortestDistance || shortestDistance == 0.0) {
                 //Sparar undan det kortaste avståndet och dess index
+                nextShortestDistance = shortestDistance;
+                nextClosestIndex = closestIndex;
                 shortestDistance = tempEnemyDistance;
                 closestIndex = i;
             }
         }
     }
-    //Väljer ut rätt riktning med det sparade indexet
-    move.theMove = directions[closestIndex];
+
+    int randMove;
+    /* initialize random seed: */
+    srand (time(NULL));
+    /* generate secret number between 1 and 10: */
+    randMove = rand() % 2 + 1;
+
+    if (randMove == 1) {
+        move.theMove = directions[nextClosestIndex];
+    } else {
+        move.theMove = directions[closestIndex];
+    }
     return move;
+    //Väljer ut rätt riktning med det sparade indexet
 }
 
 /*
