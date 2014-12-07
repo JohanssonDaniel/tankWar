@@ -154,7 +154,7 @@ action danjo732_piehe154::evasion(const sensors &s){
     int x = s.me.c;
     int y = s.me.r;
     double longestDistance = 0.0;
-    int closestIndex;
+    int closestIndex = 0;
 
     //Håller värderna för rader och kolumner runt om spelaren, representerar samma riktning som ligger i vektorn under
 
