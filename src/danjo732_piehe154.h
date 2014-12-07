@@ -22,11 +22,16 @@ public:
     action predictiveFire(const sensors&);
 
     /**
-     * @brief evasion               Jämför spelarens position och fiendens föra tt avgöra vilken riktning som ökar avståndet mest
+     * @brief evasion               Jämför spelarens position och fiendens föra att avgöra vilken riktning som ökar avståndet mest
      * @return                      action.theMove
      */
     action evasion(const sensors&);
 
+
+    /**
+     * @brief moveToOppBase        Jämför spelarens position och fiendens föra att avgöra vilken riktning som kommer närmre motståndarens bas
+     * @return                     action.theMove
+     */
     action moveToOppBase(const sensors&);
 
 
