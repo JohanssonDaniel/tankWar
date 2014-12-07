@@ -69,6 +69,20 @@ void danjo732_piehe154::analyzeEnemyPosition(const sensors &s){
     positionList.insert(make_pair(s.turn,s.opp));
 }
 /*
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
  * Räknar ut avståndet till fienden med pytagoras stats
  */
 double danjo732_piehe154::enemyDistance(int tempCol, int tempRow, int targetCol, int targetRow) const{
@@ -93,9 +107,9 @@ action danjo732_piehe154::moveToOppBase(const sensors &s){
     int x = s.me.c;
     int y = s.me.r;
     double shortestDistance = 0.0;
-    int closestIndex;
+    int closestIndex = 0;
     double nextShortestDistance = 0.0;
-    int nextClosestIndex;
+    int nextClosestIndex = 0;
 
     //Håller värderna för rader och kolumner runt om spelaren, representerar samma riktning som ligger i vektorn under
 
